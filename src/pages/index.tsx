@@ -1,11 +1,108 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '@/styles/Home.module.css'
+import Head from "next/head";
+import Image from "next/image";
+import { Inter } from "@next/font/google";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
-const inter = Inter({ subsets: ['latin'] })
+import {
+  Typography,
+  AppBar,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  CssBaseline,
+  Grid,
+  Toolbar,
+  Container,
+  Button,
+  ThemeProvider,
+  createTheme,
+  Paper,
+  Box,
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Drawer,
+} from "@mui/material";
+import Brand from "../assets/personal-brand.png";
+import { Hero, StyledSection } from "@/sections/HeroSection";
+import { Bio } from "@/sections/BioSection";
+import { Skills } from "@/sections/SkillsSection";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useState } from "react";
+import { Experience } from "@/sections/ExperienceSection";
+import { Projects } from "@/sections/ProjectsSection";
 
-export default function Home() {
+interface Props {
+  /**
+   * Injected by the documentation to work in an iframe.
+   * You won't need it on your project.
+   */
+  window?: () => Window;
+}
+
+export default function Home(props: Props) {
+  const { window } = props;
+
+  const theme = createTheme({
+    palette: {
+      mode: "light",
+      primary: {
+        main: "#1a237e",
+        light: "#474f97",
+        dark: "#121858",
+        contrastText: "#fff",
+      },
+      secondary: {
+        main: "#7c4dff",
+        light: "#9670ff",
+        dark: "#5635b2",
+        contrastText: "#fff",
+      },
+      error: {
+        main: "#f44336",
+      },
+      background: {
+        default: "#fff",
+      },
+    },
+  });
+
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen((prevState) => !prevState);
+  };
+
+  const navItems = ["Home", "About", "Contact"];
+
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+      <Typography variant="h6" sx={{ my: 2 }}>
+        MUI
+      </Typography>
+      <Divider />
+      <List>
+        {navItems.map((item) => (
+          <ListItem key={item} disablePadding>
+            <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemText primary={item} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
   return (
     <>
       <Head>
@@ -14,110 +111,68 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>src/pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
+      <CssBaseline />
+      <ThemeProvider theme={theme}>
+        <AppBar position="relative">
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: "none" } }}
             >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
+              <MenuIcon />
+            </IconButton>
+            <Box sx={{ display: { xs: "none", sm: "flex" } }}>
+              <Image src={Brand} alt="Danny Fung" />
+            </Box>
+            <Typography
+              variant="h6"
+              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+              ml={1}
+            >
+              Danny Fung
+            </Typography>
+            <Box sx={{ display: { xs: "none", sm: "block" } }}>
+              {navItems.map((item) => (
+                <Button key={item} sx={{ color: "#fff" }}>
+                  {item}
+                </Button>
+              ))}
+            </Box>
+          </Toolbar>
+        </AppBar>
+        <Box component="nav">
+          <Drawer
+            container={container}
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: 240,
+              },
+            }}
           >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+            {drawer}
+          </Drawer>
+        </Box>
+        <main>
+          <Paper>
+            <Hero />
+            <Bio />
+            <Skills />
+            <Experience />
+            <Projects />
+          </Paper>
+        </main>
+      </ThemeProvider>
     </>
-  )
+  );
 }
